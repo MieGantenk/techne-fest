@@ -8,16 +8,13 @@ import { LayoutDashboard, Calculator, BookOpen, BarChart2, HeartHandshake, Menu,
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true); // Default true untuk menghindari layout bergeser drastis
+  const [isDesktop, setIsDesktop] = useState(true); 
   const pathname = usePathname();
 
-  // Mencegah Hydration Error di Next.js & deteksi layar responsif yang aman
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 768);
-    
-    handleResize(); // Cek saat pertama kali dimuat
+    handleResize(); 
     window.addEventListener("resize", handleResize);
-    
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -30,22 +27,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   ];
 
   return (
-      // PERBAIKAN 1: Hapus overflow-x-hidden dari sini agar 'sticky' berfungsi
       <div className="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col md:flex-row">
         
-        {/* NAVBAR MOBILE */}
-        <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-100 sticky top-0 z-50 shadow-sm w-full">
+        {/* NAVBAR MOBILE - EFEK GLASSMORPHISM */}
+        <div className="md:hidden flex items-center justify-between p-4 bg-white/40 backdrop-blur-2xl border-b border-white/20 sticky top-0 z-50 shadow-lg shadow-black/5 w-full">
           <div className="flex items-center gap-2 text-teal-600 font-bold text-lg">
             <Leaf size={24} /> Handprint.
           </div>
-          <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 bg-slate-50 rounded-lg">
+          <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 bg-white/50 backdrop-blur-md rounded-lg border border-white/40">
             <Menu size={24} />
           </button>
         </div>
 
         <div className="flex flex-1 w-full relative">
           
-          {/* SIDEBAR (Desktop & Mobile Drawer) */}
+          {/* SIDEBAR - EFEK GLASSMORPHISM PREMIUM */}
           <AnimatePresence>
             {(isSidebarOpen || isDesktop) && (
               <motion.aside
@@ -53,8 +49,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 animate={{ x: 0 }}
                 exit={{ x: -300 }}
                 transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-                // PERBAIKAN 2: sticky dan h-screen sekarang akan bekerja dengan sempurna
-                className="fixed md:sticky top-0 left-0 z-50 h-screen w-72 bg-white border-r border-slate-100 shadow-[4px_0_24px_rgb(0,0,0,0.02)] p-6 flex flex-col"
+                // Kunci Glassmorphism: bg-white/40, backdrop-blur-2xl, dan border-white/20
+                className="fixed md:sticky top-0 left-0 z-50 h-screen w-72 bg-white/40 backdrop-blur-2xl border-r border-white/20 shadow-[10px_0_40px_rgba(0,0,0,0.04)] p-6 flex flex-col"
               >
                 <div className="flex items-center justify-between mb-10">
                   <div className="flex items-center gap-2 text-teal-600 font-extrabold text-2xl">
@@ -70,33 +66,41 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     const isActive = pathname === item.path;
                     return (
                       <Link href={item.path} key={item.path} onClick={() => setIsSidebarOpen(false)}>
-                        <div className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all ${
-                          isActive ? "bg-teal-50 text-teal-700 font-bold" : "text-slate-500 hover:bg-slate-50 hover:text-teal-600"
+                        <div className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 ${
+                          isActive 
+                            ? "bg-teal-600 text-white shadow-lg shadow-teal-600/20 font-bold" 
+                            : "text-slate-500 hover:bg-white/50 hover:text-teal-600 border border-transparent hover:border-white/40"
                         }`}>
-                          <item.icon size={20} className={isActive ? "text-teal-500" : "text-slate-400"} />
+                          <item.icon size={20} className={isActive ? "text-white" : "text-slate-400"} />
                           {item.name}
                         </div>
                       </Link>
                     );
                   })}
                 </nav>
+
+                {/* Tambahan: Kartu kecil di bawah sidebar biar makin "wah" */}
+                <div className="mt-auto p-4 bg-teal-600/5 rounded-2xl border border-teal-600/10 text-center">
+                  <p className="text-xs text-teal-600 font-semibold">Eco-Friendly Web</p>
+                </div>
               </motion.aside>
             )}
           </AnimatePresence>
 
-          {/* OVERLAY MOBILE */}
+          {/* OVERLAY MOBILE - BLUR BACKGROUND */}
           <AnimatePresence>
             {isSidebarOpen && !isDesktop && (
               <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
                 onClick={() => setIsSidebarOpen(false)}
-                className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden"
+                className="fixed inset-0 bg-slate-900/10 backdrop-blur-md z-40 md:hidden"
               />
             )}
           </AnimatePresence>
 
           {/* AREA KONTEN UTAMA */}
-          {/* PERBAIKAN 3: overflow-x-hidden dipindah ke sini agar tidak merusak layout parent */}
           <main className="flex-1 min-w-0 w-full relative overflow-x-hidden">
             {children}
           </main>
