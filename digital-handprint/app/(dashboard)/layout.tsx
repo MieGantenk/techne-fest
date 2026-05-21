@@ -11,7 +11,8 @@ import {
   BarChart2, 
   HeartHandshake, 
   Menu, 
-  X, 
+  X, // Ikon baru untuk fitur game
+  Gamepad2,
   Leaf,
   MessageSquare // Ikon baru untuk fitur pesan
 } from "lucide-react";
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     { name: "Komitmen Bersama", icon: HeartHandshake, path: "/komitmen" },
     { name: "Sejarah Emisi", icon: BookOpen, path: "/sejarah-emisi" },
     { name: "Pesan untuk Bumi", icon: MessageSquare, path: "/pesan" }, // Rute Baru
+    { name: "Game", icon: Gamepad2, path: "/tycoon" }, // Rute Baru
   ];
 
   return (

@@ -272,7 +272,8 @@ export default function KomitmenPage() {
           />
 
           <div className="w-full h-full">
-            <Canvas camera={{ position: [0, 2, 7], fov: 45 }} shadows antialias="true">
+            {/* PERBAIKAN 1: Kamera ditarik mundur (Z: 8.5) dan FOV diperlebar (50) agar tidak terpotong */}
+            <Canvas camera={{ position: [0, 1.5, 8.5], fov: 50 }} shadows gl={{ antialias: true }}>
               <ambientLight intensity={0.6} />
               <hemisphereLight groundColor="#0f172a" intensity={0.4} color="#ffffff" />
               <directionalLight 
@@ -313,6 +314,9 @@ export default function KomitmenPage() {
               <motion.div 
                 key="pledge-grid"
                 variants={containerVariants}
+                // PERBAIKAN 2: Tambahkan deklarasi explicit initial dan animate di sini
+                initial="hidden"
+                animate="show"
                 exit={{ opacity: 0, y: -30, transition: { duration: 0.3 } }}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
@@ -378,7 +382,6 @@ export default function KomitmenPage() {
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-teal-50/50 to-white z-0 pointer-events-none" />
                 <div className="relative z-10 flex flex-col items-center">
                   
-                  {/* BUG FIXED DI BAWAH INI: Memisahkan konfigurasi scale dan rotate */}
                   <motion.div 
                     initial={{ scale: 0 }} 
                     animate={{ scale: 1, rotate: [0, 15, -15, 0] }} 
