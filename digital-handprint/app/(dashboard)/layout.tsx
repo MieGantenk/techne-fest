@@ -4,7 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { LayoutDashboard, Calculator, BookOpen, BarChart2, HeartHandshake, Menu, X, Leaf } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Calculator, 
+  BookOpen, 
+  BarChart2, 
+  HeartHandshake, 
+  Menu, 
+  X, 
+  Leaf,
+  MessageSquare // Ikon baru untuk fitur pesan
+} from "lucide-react";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,12 +28,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Update menuItems dengan rute baru
   const menuItems = [
     { name: "Home", icon: LayoutDashboard, path: "/" },
     { name: "Kalkulator", icon: Calculator, path: "/calculator" },
     { name: "Metodologi", icon: BookOpen, path: "/metodologi" },
     { name: "Dampak & Info", icon: BarChart2, path: "/dampak" },
     { name: "Komitmen Bersama", icon: HeartHandshake, path: "/komitmen" },
+    { name: "Sejarah Emisi", icon: BookOpen, path: "/sejarah-emisi" },
+    { name: "Pesan untuk Bumi", icon: MessageSquare, path: "/pesan" }, // Rute Baru
   ];
 
   return (
